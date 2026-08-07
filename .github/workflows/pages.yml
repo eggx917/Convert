@@ -5,6 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Node 20 deprecation on older actions is only a warning; use current majors.
 permissions:
   contents: read
   pages: write
@@ -21,12 +22,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - uses: actions/upload-pages-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: .
-      - id: deployment
+
+      - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v4
