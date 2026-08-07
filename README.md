@@ -1,19 +1,26 @@
 # Convert
 
-Simple unit converter web app (length, weight, temperature).
+A modern, minimal unit conversion web app.
 
-## Links
+## Features
+
+- **18 conversion types**: Length, Weight, Temperature, Volume, Area, Speed, Time, Energy, Power, Pressure, Data, Angle, Frequency, Force, Fuel economy, Density, Cooking, Illuminance
+- Clean, minimal UI with light/dark system theme support
+- Swap units in one click
+- Bidirectional input
+- Works fully offline in the browser
+
+## Live
 
 - **Repo:** https://github.com/eggx917/Convert
-- **Live site (after enabling Pages):** https://eggx917.github.io/Convert/
+- **Site (if Pages enabled):** https://eggx917.github.io/Convert/
 
-## Enable GitHub Pages
+## Run locally
 
-1. Repo → **Settings** → **Pages**
-2. Source: **Deploy from a branch**
-3. Branch: **main** / folder **/** (root)
-4. Save — site usually appears within a minute
+Open `index.html` in a browser, or:
 
-## Local
+```bash
+python3 -m http.server 8080
+```
 
-Open `index.html` in a browser.
+Then visit http://localhost:8080
