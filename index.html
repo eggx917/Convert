@@ -3,31 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Convert — Unit Converter</title>
+  <meta name="description" content="Clean unit converter — length, weight, temperature, volume, and more." />
+  <title>Convert</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="card">
-    <h1>Convert</h1>
-    <p class="tagline">Public unit converter · eggx917</p>
+  <div class="page">
+    <header class="header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <h1>Convert</h1>
+      </div>
+      <p class="subtitle">Precise unit conversion. Minimal interface.</p>
+    </header>
 
-    <label for="category">Category</label>
-    <select id="category"></select>
+    <section class="categories" aria-label="Conversion categories">
+      <div id="categoryList" class="category-list" role="tablist"></div>
+    </section>
 
-    <label for="fromUnit">From</label>
-    <div class="row">
-      <input id="value" type="number" value="1" step="any" />
-      <select id="fromUnit"></select>
-    </div>
+    <main class="converter" aria-label="Converter">
+      <div class="panel">
+        <label class="field-label" for="fromValue">From</label>
+        <div class="field-row">
+          <input id="fromValue" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false" />
+          <select id="fromUnit" aria-label="From unit"></select>
+        </div>
+      </div>
 
-    <label for="toUnit">To</label>
-    <div class="row">
-      <output id="result">—</output>
-      <select id="toUnit"></select>
-    </div>
+      <button type="button" class="swap" id="swapBtn" title="Swap units" aria-label="Swap units">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 10V3L3 7" />
+          <path d="M7 3l4 4" />
+          <path d="M17 14v7l4-4" />
+          <path d="M17 21l-4-4" />
+          <path d="M7 10h10a2 2 0 0 1 2 2v0" />
+          <path d="M17 14H7a2 2 0 0 1-2-2v0" />
+        </svg>
+      </button>
 
-    <p id="formula" class="formula"></p>
-  </main>
+      <div class="panel">
+        <label class="field-label" for="toValue">To</label>
+        <div class="field-row">
+          <input id="toValue" type="text" inputmode="decimal" readonly tabindex="-1" />
+          <select id="toUnit" aria-label="To unit"></select>
+        </div>
+      </div>
+    </main>
+
+    <p class="formula" id="formula" aria-live="polite"></p>
+
+    <footer class="footer">
+      <span id="categoryMeta"></span>
+      <span class="dot" aria-hidden="true">·</span>
+      <span>18 conversion types</span>
+    </footer>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
