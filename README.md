@@ -10,10 +10,24 @@ A modern, minimal unit conversion web app.
 - Bidirectional input
 - Works fully offline in the browser
 
-## Live
+## Live site
 
-- **Repo:** https://github.com/eggx917/Convert
-- **Site (if Pages enabled):** https://eggx917.github.io/Convert/
+**https://eggx917.github.io/Convert/**
+
+### One-time GitHub Pages setup (required once)
+
+The deploy workflow cannot create the Pages site by itself on this account. Enable it once:
+
+1. Open **https://github.com/eggx917/Convert/settings/pages**
+2. Under **Build and deployment → Source**, choose **GitHub Actions**
+3. Save
+4. Open **Actions** → re-run **Deploy to GitHub Pages**, or push any commit to `main`
+
+After that, every push to `main` deploys automatically.
+
+### Alternative (no Actions)
+
+On the same Pages settings page, choose **Deploy from a branch**, branch **main**, folder **/ (root)**. Then you can disable the Actions workflow if you prefer.
 
 ## Run locally
 
