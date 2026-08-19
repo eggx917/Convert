@@ -2,65 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Clean unit converter — length, weight, temperature, volume, and more." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Convert — a modern, minimal unit and currency converter. Instant, precise, and easy to use." />
+  <meta name="theme-color" content="#f3efe6" />
   <title>Convert</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23171513'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23e07a3d'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip" href="#fromValue">Skip to converter</a>
+
+  <div class="glow" aria-hidden="true"></div>
+
   <div class="page">
     <header class="header">
       <div class="brand">
         <span class="brand-mark" aria-hidden="true"></span>
-        <h1>Convert</h1>
-      </div>
-      <p class="subtitle">Precise unit conversion. Minimal interface.</p>
-    </header>
-
-    <section class="categories" aria-label="Conversion categories">
-      <div id="categoryList" class="category-list" role="tablist"></div>
-    </section>
-
-    <main class="converter" aria-label="Converter">
-      <div class="panel">
-        <label class="field-label" for="fromValue">From</label>
-        <div class="field-row">
-          <input id="fromValue" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false" />
-          <select id="fromUnit" aria-label="From unit"></select>
+        <div>
+          <h1>Convert</h1>
+          <p class="tagline">Any unit. Instantly.</p>
         </div>
       </div>
-
-      <button type="button" class="swap" id="swapBtn" title="Swap units" aria-label="Swap units">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M7 10V3L3 7" />
-          <path d="M7 3l4 4" />
-          <path d="M17 14v7l4-4" />
-          <path d="M17 21l-4-4" />
-          <path d="M7 10h10a2 2 0 0 1 2 2v0" />
-          <path d="M17 14H7a2 2 0 0 1-2-2v0" />
+      <button type="button" class="theme" id="themeBtn" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z" />
         </svg>
       </button>
+    </header>
+
+    <label class="search" for="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" /><path d="M20 20l-3-3" />
+      </svg>
+      <input id="search" type="search" placeholder="Search length, currency, cooking…" autocomplete="off" />
+    </label>
+
+    <nav class="categories" aria-label="Conversion categories">
+      <div id="categoryList" class="category-list" role="tablist"></div>
+    </nav>
+
+    <main class="card" aria-label="Converter">
+      <div class="panel">
+        <div class="panel-top">
+          <label class="field-label" for="fromValue">From</label>
+          <select id="fromUnit" aria-label="From unit"></select>
+        </div>
+        <input id="fromValue" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false" />
+      </div>
+
+      <div class="mid">
+        <button type="button" class="swap" id="swapBtn" title="Swap units" aria-label="Swap units">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+            <path d="M7 4v16M7 4l-3 3M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3" />
+          </svg>
+        </button>
+      </div>
 
       <div class="panel">
-        <label class="field-label" for="toValue">To</label>
-        <div class="field-row">
-          <input id="toValue" type="text" inputmode="decimal" readonly tabindex="-1" />
+        <div class="panel-top">
+          <label class="field-label" for="toValue">To</label>
           <select id="toUnit" aria-label="To unit"></select>
+        </div>
+        <div class="result-row">
+          <input id="toValue" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" />
+          <button type="button" class="copy" id="copyBtn" title="Copy result" aria-label="Copy result">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+              <rect x="9" y="9" width="11" height="11" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+          </button>
         </div>
       </div>
     </main>
 
     <p class="formula" id="formula" aria-live="polite"></p>
 
+    <section class="also" aria-label="Other equivalents">
+      <h2>Also equals</h2>
+      <div id="alsoList" class="also-list"></div>
+    </section>
+
     <footer class="footer">
       <span id="categoryMeta"></span>
       <span class="dot" aria-hidden="true">·</span>
-      <span>18 conversion types</span>
+      <span id="rateMeta">Offline-ready unit math</span>
     </footer>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
