@@ -176,6 +176,63 @@ const CATEGORIES = [
   },
 ];
 
+const BUCKETS = [
+  { name: "Everyday", ids: ["length", "weight", "temperature", "volume", "area", "cooking", "currency"] },
+  { name: "Motion", ids: ["speed", "time", "fuel", "data"] },
+  { name: "Science", ids: ["energy", "power", "pressure", "force", "density", "angle", "frequency", "illuminance"] },
+];
+
+const UNIT_GROUPS = {
+  length: [
+    { label: "Metric", units: ["nanometer", "micrometer", "millimeter", "centimeter", "meter", "kilometer"] },
+    { label: "Imperial", units: ["inch", "foot", "yard", "mile"] },
+    { label: "Other", units: ["nautical mile", "lightyear"] },
+  ],
+  weight: [
+    { label: "Metric", units: ["microgram", "milligram", "gram", "kilogram", "tonne"] },
+    { label: "Imperial", units: ["ounce", "pound", "stone", "US ton", "imperial ton"] },
+  ],
+  volume: [
+    { label: "Metric", units: ["milliliter", "liter", "cubic meter"] },
+    { label: "US", units: ["teaspoon", "tablespoon", "fluid ounce (US)", "cup", "pint", "quart", "gallon", "cubic inch", "cubic foot"] },
+    { label: "Imperial", units: ["imperial gallon"] },
+  ],
+  area: [
+    { label: "Metric", units: ["square millimeter", "square centimeter", "square meter", "hectare", "square kilometer"] },
+    { label: "Imperial", units: ["square inch", "square foot", "square yard", "acre", "square mile"] },
+  ],
+  speed: [
+    { label: "Everyday", units: ["kilometer/hour", "mile/hour", "meter/second", "foot/second"] },
+    { label: "Other", units: ["knot", "mach", "speed of light"] },
+  ],
+  time: [
+    { label: "Clock", units: ["nanosecond", "microsecond", "millisecond", "second", "minute", "hour"] },
+    { label: "Calendar", units: ["day", "week", "month", "year", "decade", "century"] },
+  ],
+  data: [
+    { label: "Decimal", units: ["bit", "byte", "kilobyte", "megabyte", "gigabyte", "terabyte", "petabyte"] },
+    { label: "Binary", units: ["kibibyte", "mebibyte", "gibibyte", "tebibyte"] },
+  ],
+  cooking: [
+    { label: "Metric", units: ["milliliter", "liter", "drop"] },
+    { label: "Kitchen", units: ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "stick"] },
+  ],
+  currency: [
+    { label: "Americas", units: ["USD", "CAD", "MXN", "BRL"] },
+    { label: "Europe", units: ["EUR", "GBP", "CHF", "SEK", "NOK", "DKK", "PLN", "TRY"] },
+    { label: "Asia-Pacific", units: ["JPY", "CNY", "INR", "KRW", "SGD", "HKD", "AUD", "NZD"] },
+    { label: "Other", units: ["ZAR"] },
+  ],
+  energy: [
+    { label: "SI", units: ["joule", "kilojoule", "watt hour", "kilowatt hour", "electronvolt"] },
+    { label: "Food & heat", units: ["calorie", "kilocalorie", "British thermal unit", "therm", "foot-pound"] },
+  ],
+  pressure: [
+    { label: "SI", units: ["pascal", "kilopascal", "megapascal", "bar", "millibar"] },
+    { label: "Common", units: ["atmosphere", "psi", "torr", "mmHg", "inHg"] },
+  ],
+};
+
 const DEFAULTS = {
   length: ["meter", "foot"],
   weight: ["kilogram", "pound"],
@@ -339,9 +396,29 @@ function renderAlso(fromVal, fromUnit) {
     .join("");
 }
 
+function optionHtml(n) {
+  return `<option value="${escapeAttr(n)}">${n}</option>`;
+}
+
+function unitSelectHtml(category) {
+  const names = unitNames(category);
+  const groups = UNIT_GROUPS[category.id];
+  if (!groups) return names.map(optionHtml).join("");
+  const grouped = new Set();
+  const parts = groups.map((g) => {
+    const items = g.units.filter((n) => names.includes(n));
+    items.forEach((n) => grouped.add(n));
+    if (!items.length) return "";
+    return `<optgroup label="${escapeAttr(g.label)}">${items.map(optionHtml).join("")}</optgroup>`;
+  });
+  const rest = names.filter((n) => !grouped.has(n));
+  if (rest.length) parts.push(rest.map(optionHtml).join(""));
+  return parts.join("");
+}
+
 function fillUnitSelects(preferFrom, preferTo) {
   const names = unitNames(activeCategory);
-  const options = names.map((n) => `<option value="${escapeAttr(n)}">${n}</option>`).join("");
+  const options = unitSelectHtml(activeCategory);
   els.fromUnit.innerHTML = options;
   els.toUnit.innerHTML = options;
   els.fromUnit.value = names.includes(preferFrom) ? preferFrom : names[0];
@@ -370,17 +447,25 @@ function setCategory(id) {
   else els.rateMeta.textContent = "SI-accurate offline math";
 }
 
+function chipHtml(c) {
+  return `<button type="button" class="chip" role="tab" data-id="${c.id}" aria-selected="${
+    c.id === activeCategory.id ? "true" : "false"
+  }">${c.name}</button>`;
+}
+
 function renderCategories(filter = "") {
   const q = filter.trim().toLowerCase();
-  const list = CATEGORIES.filter((c) => !q || c.name.toLowerCase().includes(q) || c.id.includes(q));
-  els.categoryList.innerHTML = list
-    .map(
-      (c) =>
-        `<button type="button" class="chip" role="tab" data-id="${c.id}" aria-selected="${
-          c.id === activeCategory.id ? "true" : "false"
-        }">${c.name}</button>`
-    )
-    .join("");
+  const match = (c) => !q || c.name.toLowerCase().includes(q) || c.id.includes(q);
+  const byId = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]));
+  const html = BUCKETS.map((bucket) => {
+    const items = bucket.ids.map((id) => byId[id]).filter((c) => c && match(c));
+    if (!items.length) return "";
+    return `<div class="bucket">
+      <p class="bucket-label">${bucket.name}</p>
+      <div class="bucket-chips">${items.map(chipHtml).join("")}</div>
+    </div>`;
+  }).join("");
+  els.categoryList.innerHTML = html || `<p class="bucket-empty">No matching units</p>`;
 }
 
 function swapUnits() {
