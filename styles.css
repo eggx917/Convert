@@ -186,17 +186,25 @@ body {
 .chip {
   appearance: none;
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
   border: 1px solid var(--line);
   background: var(--chip);
   color: var(--muted);
   font: inherit;
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.48rem 0.82rem;
+  padding: 0.42rem 0.78rem 0.42rem 0.58rem;
   border-radius: 999px;
   cursor: pointer;
   white-space: nowrap;
   transition: 0.15s ease;
+}
+
+.chip-icon {
+  display: block;
+  flex: 0 0 15px;
 }
 
 .chip:hover { color: var(--text); border-color: var(--line-strong); }
