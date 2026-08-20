@@ -22,7 +22,20 @@ function renderCategories(filter = "") {
 }
 
 function pairChip(p, kind) {
-  return `<button type="button" class="chip" data-kind="${kind}" data-cat="${p.cat}" data-from="${escapeAttr(p.from)}" data-to="${escapeAttr(p.to)}">${iconSvg(p.cat)}<span>${shortUnit(p.from)} \u2192 ${shortUnit(p.to)}</span></button>`;
+  const current = p.cat === activeCategory.id && p.from === els.fromUnit.value && p.to === els.toUnit.value;
+  const cls = current ? "chip rail-chip is-current" : "chip rail-chip";
+  return `<button type="button" class="${cls}" data-kind="${kind}" data-cat="${p.cat}" data-from="${escapeAttr(p.from)}" data-to="${escapeAttr(p.to)}" aria-current="${current ? "true" : "false"}">${iconSvg(p.cat)}<span>${shortUnit(p.from)} \u2192 ${shortUnit(p.to)}</span></button>`;
+}
+
+function highlightRail() {
+  const cat = activeCategory.id;
+  const from = els.fromUnit.value;
+  const to = els.toUnit.value;
+  els.shortcutRow.querySelectorAll(".rail-chip").forEach((btn) => {
+    const on = btn.dataset.cat === cat && btn.dataset.from === from && btn.dataset.to === to;
+    btn.classList.toggle("is-current", on);
+    btn.setAttribute("aria-current", on ? "true" : "false");
+  });
 }
 
 function renderShortcuts() {

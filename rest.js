@@ -66,6 +66,7 @@ function convert() {
   Store.rememberPair(activeCategory.id, from, to);
   writeHash();
   updatePin();
+  if (typeof highlightRail === "function") highlightRail();
   scheduleLog();
   refreshSpark();
 }
