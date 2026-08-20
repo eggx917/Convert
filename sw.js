@@ -1,13 +1,15 @@
-const CACHE = "convert-2.0.0";
+const CACHE = "convert-2.0.1";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./extra.css",
   "./icons.js",
   "./units-data.js",
   "./parse.js",
   "./store.js",
   "./app.js",
+  "./ui.js",
   "./manifest.json",
 ];
 
