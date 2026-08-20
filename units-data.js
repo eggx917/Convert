@@ -171,7 +171,7 @@ const CATEGORIES = [
     units: {
       USD: null, CAD: null, MXN: null, BRL: null, ARS: null, CLP: null, COP: null, PEN: null, UYU: null, CRC: null, DOP: null, GTQ: null, BOB: null,
       EUR: null, GBP: null, CHF: null, SEK: null, NOK: null, DKK: null, PLN: null, CZK: null, HUF: null, RON: null, BGN: null, ISK: null, UAH: null, TRY: null,
-      JPY: null, CNY: null, INR: null, KRW: null, TWD: null, HKD: null, SGD: null, AUD: null, NZD: null, THB: null, PHP: null, IDR: null, VND: null, MYR: null, PKR: null, BDT: null, LKR: null,
+      JPY: null, CNY: null, INR: null, KRW: null, NTD: null, TWD: null, HKD: null, SGD: null, AUD: null, NZD: null, THB: null, PHP: null, IDR: null, VND: null, MYR: null, PKR: null, BDT: null, LKR: null,
       AED: null, SAR: null, ILS: null, QAR: null, KWD: null, BHD: null, OMR: null, EGP: null, MAD: null, TND: null, JOD: null, ZAR: null, NGN: null, KES: null, GHS: null, UGX: null,
       BTC: null, ETH: null, USDT: null, USDC: null, SOL: null,
     },
@@ -222,7 +222,7 @@ const UNIT_GROUPS = {
   currency: [
     { label: "Americas", units: ["USD", "CAD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU", "CRC", "DOP", "GTQ", "BOB"] },
     { label: "Europe", units: ["EUR", "GBP", "CHF", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "ISK", "UAH", "TRY"] },
-    { label: "Asia-Pacific", units: ["JPY", "CNY", "INR", "KRW", "TWD", "HKD", "SGD", "AUD", "NZD", "THB", "PHP", "IDR", "VND", "MYR", "PKR", "BDT", "LKR"] },
+    { label: "Asia-Pacific", units: ["JPY", "CNY", "INR", "KRW", "NTD", "TWD", "HKD", "SGD", "AUD", "NZD", "THB", "PHP", "IDR", "VND", "MYR", "PKR", "BDT", "LKR"] },
     { label: "Middle East & Africa", units: ["AED", "SAR", "ILS", "QAR", "KWD", "BHD", "OMR", "EGP", "MAD", "TND", "JOD", "ZAR", "NGN", "KES", "GHS", "UGX"] },
     { label: "Crypto", units: ["BTC", "ETH", "USDT", "USDC", "SOL"] },
   ],
@@ -255,5 +255,5 @@ const DEFAULTS = {
   density: ["g/cm3", "kg/m3"],
   cooking: ["cup", "milliliter"],
   illuminance: ["lux", "foot-candle"],
-  currency: ["USD", "EUR"],
+  currency: ["USD", "NTD"],
 };
