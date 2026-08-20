@@ -98,6 +98,7 @@ function applyMarketRates(raw, fetchedAt) {
     const n = Number(raw[code]);
     if (Number.isFinite(n) && n > 0) rates[code] = n;
   });
+  if (rates.TWD) rates.NTD = rates.TWD;
   fx = { base: "USD", fetchedAt: fetchedAt || Date.now(), source: "Coinbase", rates };
   fxReady = true;
   Store.saveFx(fx);
