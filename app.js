@@ -39,7 +39,7 @@ function unitNames(category) {
 }
 
 function escapeAttr(s) {
-  return String(s).replace(/&/g, "&").replace(/"/g, """).replace(/</g, "<");
+  return String(s).replace(/&/g, "\u0026amp;").replace(/\"/g, "\u0026quot;").replace(/</g, "\u0026lt;");
 }
 
 function formatNumber(n) {
