@@ -1,4 +1,4 @@
-const CACHE = "convert-2.0.3";
+const CACHE = "convert-2.0.4";
 const ASSETS = [
   "./",
   "./index.html",
