@@ -1,4 +1,4 @@
-const CACHE = "convert-2.0.2";
+const CACHE = "convert-2.0.3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -27,14 +27,14 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  if (url.origin === "https://api.frankfurter.dev") {
+  if (url.origin === "https://api.coinbase.com" || url.origin === "https://api.frankfurter.dev") {
     event.respondWith(
       fetch(event.request)
         .then((res) => {
           const copy = res.clone();
           caches.open(CACHE).then((cache) => cache.put(event.request, copy));
           return res;
-        })
+ mar        })
         .catch(() => caches.match(event.request))
     );
     return;
