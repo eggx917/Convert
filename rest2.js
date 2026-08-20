@@ -16,10 +16,7 @@ function renderCategories(filter = "") {
   const html = BUCKETS.map((bucket) => {
     const items = bucket.ids.map((id) => byId[id]).filter((c) => c && match(c));
     if (!items.length) return "";
-    return `<div class="bucket">
-      <p class="bucket-label">${bucket.name}</p>
-      <div class="bucket-chips">${items.map(chipHtml).join("")}</div>
-    </div>`;
+    return `<div class="bucket">\n      <p class="bucket-label">${bucket.name}</p>\n      <div class="bucket-chips">${items.map(chipHtml).join("")}</div>\n    </div>`;
   }).join("");
   els.categoryList.innerHTML = html || `<p class="bucket-empty">No matching units</p>`;
 }
@@ -58,33 +55,117 @@ function swapUnits() {
   convert();
 }
 
-async function loadRates() {
-  els.rateMeta.textContent = "Fetching live FX\u2026";
+const FX_MAX_AGE = 60 * 60 * 1000;
+const FX_SOFT_AGE = 5 * 60 * 1000;
+const FX_URL = "https://api.coinbase.com/v2/exchange-rates?currency=USD";
+const FRANKFURTER_CODES = new Set([
+  "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "CNY", "INR", "KRW", "MXN", "BRL",
+  "SEK", "NOK", "DKK", "SGD", "HKD", "NZD", "ZAR", "TRY", "PLN",
+]);
+let fxTimer = null;
+let fxFetching = false;
+
+function fxAgeMs() {
+  return Date.now() - (fx.fetchedAt || 0);
+}
+
+function formatFxAge() {
+  if (!fx.fetchedAt) return "cached";
+  const m = Math.max(0, Math.round(fxAgeMs() / 60000));
+  if (m < 1) return "just now";
+  if (m === 1) return "1 min ago";
+  if (m < 60) return m + " min ago";
+  const h = Math.round(m / 60);
+  return h === 1 ? "1h ago" : h + "h ago";
+}
+
+function fxMetaLine(extra) {
+  const stale = fx.fetchedAt && fxAgeMs() > FX_MAX_AGE;
+  const bits = ["FX", "Coinbase", formatFxAge()];
+  if (stale) bits.push("refreshing");
+  if (extra) bits.push(extra);
+  els.rateMeta.textContent = bits.join(" \u00b7 ");
+}
+
+function currencyAllowlist() {
+  return (UNIT_GROUPS.currency || []).flatMap((g) => g.units);
+}
+
+function applyMarketRates(raw, fetchedAt) {
+  const allow = new Set(currencyAllowlist());
+  const rates = { USD: 1 };
+  allow.forEach((code) => {
+    const n = Number(raw[code]);
+    if (Number.isFinite(n) && n > 0) rates[code] = n;
+  });
+  fx = { base: "USD", fetchedAt: fetchedAt || Date.now(), source: "Coinbase", rates };
+  fxReady = true;
+  Store.saveFx(fx);
+  const cat = CATEGORIES.find((c) => c.id === "currency");
+  if (cat) {
+    cat.units = {};
+    Object.keys(rates).forEach((code) => { cat.units[code] = null; });
+  }
+  if (activeCategory.id === "currency") {
+    fillUnitSelects(els.fromUnit.value, els.toUnit.value);
+    els.categoryMeta.textContent = "Currency \u00b7 " + Object.keys(rates).length + " units";
+  }
+}
+
+function startFxClock() {
+  clearInterval(fxTimer);
+  fxTimer = setInterval(() => {
+    if (activeCategory.custom === "currency") loadRates();
+    else clearInterval(fxTimer);
+  }, FX_SOFT_AGE);
+}
+
+async function fetchMarketRates() {
+  if (fxFetching) return false;
+  fxFetching = true;
   try {
-    const res = await fetch("https://api.frankfurter.dev/v1/latest?from=USD");
+    const res = await fetch(FX_URL);
     if (!res.ok) throw new Error("rate fetch failed");
     const data = await res.json();
-    fx = { base: "USD", date: data.date, rates: { USD: 1, ...data.rates } };
-    fxReady = true;
-    Store.saveFx(fx);
-    els.rateMeta.textContent = `FX \u00b7 ECB ${data.date}`;
+    const raw = (data.data && data.data.rates) || {};
+    applyMarketRates(raw, Date.now());
+    fxMetaLine();
     convert();
+    return true;
   } catch {
-    if (Store.fxCache && Store.fxCache.rates) {
-      fx = Store.fxCache;
-      fxReady = true;
-      els.rateMeta.textContent = `FX \u00b7 ECB ${fx.date} \u00b7 cached`;
-      convert();
-    } else {
-      els.rateMeta.textContent = "FX unavailable \u2014 try again later";
-    }
+    return false;
+  } finally {
+    fxFetching = false;
+  }
+}
+
+async function loadRates() {
+  startFxClock();
+  if (!fxReady && Store.fxCache && Store.fxCache.rates) {
+    applyMarketRates(Store.fxCache.rates, Store.fxCache.fetchedAt || 0);
+    convert();
+  }
+  const age = fx.fetchedAt ? fxAgeMs() : Infinity;
+  if (fxReady && age < FX_MAX_AGE) {
+    fxMetaLine();
+    if (age >= FX_SOFT_AGE) fetchMarketRates();
+    return;
+  }
+  els.rateMeta.textContent = "Fetching live FX\u2026";
+  const ok = await fetchMarketRates();
+  if (ok) return;
+  if (fxReady && fx.rates) {
+    fxMetaLine("offline");
+    convert();
+  } else {
+    els.rateMeta.textContent = "FX unavailable \u2014 try again later";
   }
 }
 
 async function drawSpark() {
   const from = els.fromUnit.value;
   const to = els.toUnit.value;
-  if (from === to) {
+  if (from === to || !FRANKFURTER_CODES.has(from) || !FRANKFURTER_CODES.has(to)) {
     els.spark.hidden = true;
     return;
   }
