@@ -1,4 +1,4 @@
-const CACHE = "convert-2.0.1";
+const CACHE = "convert-2.0.2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,6 +9,8 @@ const ASSETS = [
   "./parse.js",
   "./store.js",
   "./app.js",
+  "./rest.js",
+  "./rest2.js",
   "./ui.js",
   "./manifest.json",
 ];
