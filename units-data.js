@@ -142,10 +142,10 @@ const CATEGORIES = [
   {
     id: "density",
     name: "Density",
-    base: "kg/m³",
+    base: "kg/m3",
     units: {
-      "kg/m³": 1, "g/cm³": 1000, "g/mL": 1000, "kg/L": 1000,
-      "lb/ft³": 16.01846337396, "lb/in³": 27679.904710203, "oz/in³": 1729.9940443865,
+      "kg/m3": 1, "g/cm3": 1000, "g/mL": 1000, "kg/L": 1000,
+      "lb/ft3": 16.01846337396, "lb/in3": 27679.904710203, "oz/in3": 1729.9940443865,
     },
   },
   {
@@ -169,9 +169,11 @@ const CATEGORIES = [
     name: "Currency",
     custom: "currency",
     units: {
-      USD: null, EUR: null, GBP: null, JPY: null, CAD: null, AUD: null, CHF: null,
-      CNY: null, INR: null, KRW: null, MXN: null, BRL: null, SEK: null, NOK: null,
-      DKK: null, SGD: null, HKD: null, NZD: null, ZAR: null, TRY: null, PLN: null,
+      USD: null, CAD: null, MXN: null, BRL: null, ARS: null, CLP: null, COP: null, PEN: null, UYU: null, CRC: null, DOP: null, GTQ: null, BOB: null,
+      EUR: null, GBP: null, CHF: null, SEK: null, NOK: null, DKK: null, PLN: null, CZK: null, HUF: null, RON: null, BGN: null, ISK: null, UAH: null, TRY: null,
+      JPY: null, CNY: null, INR: null, KRW: null, TWD: null, HKD: null, SGD: null, AUD: null, NZD: null, THB: null, PHP: null, IDR: null, VND: null, MYR: null, PKR: null, BDT: null, LKR: null,
+      AED: null, SAR: null, ILS: null, QAR: null, KWD: null, BHD: null, OMR: null, EGP: null, MAD: null, TND: null, JOD: null, ZAR: null, NGN: null, KES: null, GHS: null, UGX: null,
+      BTC: null, ETH: null, USDT: null, USDC: null, SOL: null,
     },
   },
 ];
@@ -218,10 +220,11 @@ const UNIT_GROUPS = {
     { label: "Kitchen", units: ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "stick"] },
   ],
   currency: [
-    { label: "Americas", units: ["USD", "CAD", "MXN", "BRL"] },
-    { label: "Europe", units: ["EUR", "GBP", "CHF", "SEK", "NOK", "DKK", "PLN", "TRY"] },
-    { label: "Asia-Pacific", units: ["JPY", "CNY", "INR", "KRW", "SGD", "HKD", "AUD", "NZD"] },
-    { label: "Other", units: ["ZAR"] },
+    { label: "Americas", units: ["USD", "CAD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU", "CRC", "DOP", "GTQ", "BOB"] },
+    { label: "Europe", units: ["EUR", "GBP", "CHF", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "ISK", "UAH", "TRY"] },
+    { label: "Asia-Pacific", units: ["JPY", "CNY", "INR", "KRW", "TWD", "HKD", "SGD", "AUD", "NZD", "THB", "PHP", "IDR", "VND", "MYR", "PKR", "BDT", "LKR"] },
+    { label: "Middle East & Africa", units: ["AED", "SAR", "ILS", "QAR", "KWD", "BHD", "OMR", "EGP", "MAD", "TND", "JOD", "ZAR", "NGN", "KES", "GHS", "UGX"] },
+    { label: "Crypto", units: ["BTC", "ETH", "USDT", "USDC", "SOL"] },
   ],
   energy: [
     { label: "SI", units: ["joule", "kilojoule", "watt hour", "kilowatt hour", "electronvolt"] },
@@ -249,7 +252,7 @@ const DEFAULTS = {
   frequency: ["hertz", "rpm"],
   force: ["newton", "pound-force"],
   fuel: ["mpg", "L/100km"],
-  density: ["g/cm³", "kg/m³"],
+  density: ["g/cm3", "kg/m3"],
   cooking: ["cup", "milliliter"],
   illuminance: ["lux", "foot-candle"],
   currency: ["USD", "EUR"],
